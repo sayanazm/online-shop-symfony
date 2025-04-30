@@ -4,78 +4,106 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
-class User
+class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\NotBlank(message: "Email is required.")]
+    #[Assert\Email(message: "Please provide a valid email address.")]
+    private string $email;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $second_name = null;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank(message: "Password is required.")]
+    #[Assert\Length(min: 6, minMessage: "Password must be at least {{ limit }} characters long.")]
+    private string $password;
 
-    #[ORM\Column]
-    private ?int $phone_number = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Name is required.")]
+    #[Assert\Length(max: 255, maxMessage: "Name must not be longer than {{ limit }} characters.")]
+    private string $name;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    #[ORM\Column(type: 'string', length: 20)]
+    #[Assert\NotBlank(message: "Phone number is required.")]
+    #[Assert\Regex(
+        pattern: "/^\+?[1-9]\d{1,14}$/",
+        message: "Invalid phone number format."
+    )]
+    private string $phone;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isModerator = false;
+
+    public function __construct(
+        string $email,
+        string $plainPassword,
+        string $name,
+        string $phone,
+        UserPasswordHasherInterface $hasher,
+        ?bool $isModerator = false
+    ) {
+        $this->email = $email;
+        $this->name = $name;
+        $this->phone = $phone;
+        $this->isModerator = $isModerator;
+        $this->password = $hasher->hashPassword($this, $plainPassword);
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getSecondName(): ?string
-    {
-        return $this->second_name;
-    }
-
-    public function setSecondName(?string $second_name): static
-    {
-        $this->second_name = $second_name;
-
-        return $this;
-    }
-
-    public function getPhoneNumber(): ?int
-    {
-        return $this->phone_number;
-    }
-
-    public function setPhoneNumber(int $phone_number): static
-    {
-        $this->phone_number = $phone_number;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function getPassword(): string
     {
-        $this->email = $email;
+        return $this->password;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->isModerator ? ['ROLE_ADMIN'] : ['ROLE_USER'];
+    }
+
+    public function setIsModerator(bool $isModerator): self
+    {
+        $this->isModerator = $isModerator;
 
         return $this;
+    }
+
+    public function getIsModerator(): array
+    {
+        return $this->isModerator ? ['ROLE_ADMIN'] : ['ROLE_USER'];
+    }
+
+    public function eraseCredentials(): void {}
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
     }
 }

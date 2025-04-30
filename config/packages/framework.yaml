@@ -8,6 +8,12 @@ framework:
     #esi: true
     #fragments: true
 
+    validation:
+        enabled: true
+        auto_mapping:
+            App\Entity\: [ ]
+            App\DTO\: [ ]
+
 when@test:
     framework:
         test: true
