@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Entity;
+namespace App\Order\Entity;
 
-use App\Enum\DeliveryType;
-use App\Enum\OrderStatus;
+use App\Order\Enum\DeliveryType;
+use App\Order\Enum\OrderStatus;
+use App\User\Entity\User;
 use DateTimeInterface;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -13,22 +15,22 @@ class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: Types::STRING, length: 20)]
     private string $phone;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: Types::STRING, length: 20)]
     private DeliveryType $deliveryType;
 
-    #[ORM\Column(type: 'string', length: 30)]
+    #[ORM\Column(type: Types::STRING, length: 30)]
     private OrderStatus $status;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTimeInterface $createdAt;
 }

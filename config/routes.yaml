@@ -1,7 +1,19 @@
-controllers:
+order_controllers:
     resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+        path: ../src/Order/Controller/
+        namespace: App\Order\Controller
+    type: attribute
+
+product_controllers:
+    resource:
+        path: ../src/Product/Controller/
+        namespace: App\Product\Controller
+    type: attribute
+
+user_controllers:
+    resource:
+        path: ../src/User/Controller/
+        namespace: App\User\Controller
     type: attribute
 
 login_check:

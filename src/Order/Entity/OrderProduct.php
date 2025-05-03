@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Order\Entity;
 
+use App\Product\Entity\Product;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -10,7 +12,7 @@ class OrderProduct
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: Order::class)]
@@ -21,9 +23,9 @@ class OrderProduct
     #[ORM\JoinColumn(nullable: false)]
     private Product $product;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $quantity;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: Types::FLOAT)]
     private float $price;
 }

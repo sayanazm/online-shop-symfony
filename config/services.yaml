@@ -26,3 +26,8 @@ services:
     App\Doctrine\EventListener\FixPostgreSQLDefaultSchemaListener:
         tags:
             - { name: doctrine.event_listener, event: postGenerateSchema }
+
+    App\User\Doctrine\EventListener\UserListener:
+        arguments:
+            $passwordHasher: '@security.user_password_hasher'
+        tags: [ 'doctrine.orm.entity_listener' ]
