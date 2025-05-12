@@ -1,0 +1,13 @@
+user.registered: "Вы успешно зарегистрированы"
+
+error:
+  user:
+    exists: "Пользователь уже зарегистрирован"
+    invalid_phone: "Неверный формат номера телефона"
+    phone_required: "Номер телефона не может быть пустым"
+    email_required: "Email обязателен"
+    invalid_email: "Введите верный формат Email"
+    password_required: "Пароль не может быть пустым"
+    password_min: "Пароль должен содержать минимум {{ limit }} символов"
+    name_required: "Имя не может быть пустым"
+    name_max: "Имя должно содержать максимум {{ limit }} символов"

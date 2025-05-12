@@ -12,23 +12,26 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AuthController extends AbstractController
 {
-    #[Route('/register', name: 'register', methods: ['POST'])]
+    #[Route('/register', name: 'register', methods: ['POST'], format: 'json')]
     public function register(
         #[MapRequestPayload] RegisterRequestDto $request,
-        EntityManagerInterface      $em,
-        UserRepository              $userRepository,
+        EntityManagerInterface $em,
+        UserRepository         $userRepository,
+        TranslatorInterface $translator,
     ): Response|JsonResponse {
         if (
             $userRepository->findOneBy(['email' => $request->email])
             || $userRepository->findOneBy(['phone' => $request->phone])
         ) {
-            return new JsonResponse([
-                'status' => 'error',
-                'message' => 'User is already registered',
-            ], Response::HTTP_CONFLICT);
+
+            return new JsonResponse(
+                ['message' => $translator->trans('error.user.exists')],
+                Response::HTTP_CONFLICT
+            );
         }
 
         $user = new User(
@@ -42,8 +45,8 @@ class AuthController extends AbstractController
         $em->flush();
 
         return new JsonResponse([
-            'message' => 'Registered successfully',
-        ]);
+            'message' => $translator->trans('user.registered')
+        ], Response::HTTP_CREATED);
     }
 
     #[Route('/api/me', name: 'api_me', methods: ['GET'])]

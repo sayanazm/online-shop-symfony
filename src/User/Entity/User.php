@@ -21,30 +21,30 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
-    #[Assert\NotBlank(message: "Email is required.")]
-    #[Assert\Email(message: "Please provide a valid email address.")]
+    #[Assert\NotBlank(message: "error.user.email_required")]
+    #[Assert\Email(message: "error.user.invalid_email")]
     private string $email;
 
     #[ORM\Column(type: Types::STRING)]
-    #[Assert\NotBlank(message: "Password is required.")]
-    #[Assert\Length(min: 6, minMessage: "Password must be at least {{ limit }} characters long.")]
+    #[Assert\NotBlank(message: "error.user.password_required")]
+    #[Assert\Length(min: 6, minMessage: "error.user.password_min")]
     private string $password;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank(message: "Name is required.")]
-    #[Assert\Length(max: 255, maxMessage: "Name must not be longer than {{ limit }} characters.")]
+    #[Assert\NotBlank(message: "error.user.name_required")]
+    #[Assert\Length(max: 255, maxMessage: "error.user.name_max")]
     private string $name;
 
     #[ORM\Column(type: Types::STRING, length: 20)]
-    #[Assert\NotBlank(message: "Phone number is required.")]
+    #[Assert\NotBlank(message: "error.user.phone_required")]
     #[Assert\Regex(
         pattern: "/^\+?[1-9]\d{1,14}$/",
-        message: "Invalid phone number format."
+        message: "error.user.invalid_phone"
     )]
     private string $phone;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    private bool $isModerator = false;
+    private bool $isModerator;
 
     public function __construct(
         string $email,

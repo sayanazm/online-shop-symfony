@@ -4,10 +4,10 @@ order_controllers:
         namespace: App\Order\Controller
     type: attribute
 
-product_controllers:
+cart_controllers:
     resource:
-        path: ../src/Product/Controller/
-        namespace: App\Product\Controller
+        path: ../src/Cart/Controller/
+        namespace: App\Cart\Controller
     type: attribute
 
 user_controllers:

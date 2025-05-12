@@ -1,0 +1,13 @@
+user.registered: "Registered successfully"
+
+error:
+  user:
+    exists: "User is already registered"
+    invalid_phone: "Invalid phone number format"
+    phone_required: "Phone number is required"
+    email_required: "Email is required"
+    invalid_email: "Please provide a valid email address"
+    password_required: "Password is required"
+    password_min: "Password must be at least {{ limit }} characters long."
+    name_required: "Name is required"
+    name_max: "Name must not be longer than {{ limit }} characters."
