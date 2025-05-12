@@ -1,0 +1,12 @@
+framework:
+  messenger:
+    transports:
+      products:
+        dsn: 'amqp://guest:guest@rabbitmq:5672/%2f'
+        options:
+          exchange:
+            name: products
+            type: direct
+
+    routing:
+      App\Product\Message\ProductMessage: products

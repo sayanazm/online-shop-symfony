@@ -10,6 +10,12 @@ cart_controllers:
         namespace: App\Cart\Controller
     type: attribute
 
+product_controllers:
+    resource:
+        path: ../src/Product/Controller/
+        namespace: App\Product\Controller
+    type: attribute
+
 user_controllers:
     resource:
         path: ../src/User/Controller/
